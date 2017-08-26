@@ -11,14 +11,6 @@ public class Produto {
     private BigDecimal valorCompra;
     private BigDecimal valorVenda;
     private String categoria;
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
     private Date dtCadastro;
 
     public Produto() {
@@ -73,6 +65,14 @@ public class Produto {
 
     public void setValorVenda(BigDecimal valorVenda) {
         this.valorVenda = valorVenda;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public Date getDtCadastro() {
