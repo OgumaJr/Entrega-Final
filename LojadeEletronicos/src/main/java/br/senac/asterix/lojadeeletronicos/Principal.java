@@ -4,7 +4,9 @@ import br.senac.asterix.lojadeeletronicos.classes.Produto;
 import br.senac.asterix.lojadeeletronicos.servicos.ServicoProduto;
 import java.awt.CardLayout;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -23,18 +25,18 @@ public class Principal extends javax.swing.JFrame {
         Root = new javax.swing.JPanel();
         JpCadastrar = new javax.swing.JPanel();
         jlbNome = new javax.swing.JLabel();
-        JtxtNome = new javax.swing.JTextField();
         jlbDescricao = new javax.swing.JLabel();
+        jlbCategoria = new javax.swing.JLabel();
         jlbCompra = new javax.swing.JLabel();
-        jtxtCompra = new javax.swing.JTextField();
         jlbVenda = new javax.swing.JLabel();
+        JtxtNome = new javax.swing.JTextField();
+        jtxtCategoria = new javax.swing.JTextField();
+        jtxtCompra = new javax.swing.JTextField();
         jtxtVenda = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jADescricao = new javax.swing.JTextArea();
         jbIncluir = new javax.swing.JButton();
         jbSalvar = new javax.swing.JButton();
-        jlbCategoria = new javax.swing.JLabel();
-        jtxtCategoria = new javax.swing.JTextField();
         JpConsultar = new javax.swing.JPanel();
         jlbConsultar = new javax.swing.JLabel();
         jtxtConsultar = new javax.swing.JTextField();
@@ -42,6 +44,7 @@ public class Principal extends javax.swing.JFrame {
         jtConsultar = new javax.swing.JTable();
         jbAlterar = new javax.swing.JButton();
         jbExcluir = new javax.swing.JButton();
+        jbBuscar = new javax.swing.JButton();
         jbSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,6 +69,8 @@ public class Principal extends javax.swing.JFrame {
 
         jlbDescricao.setText("Descrição:");
 
+        jlbCategoria.setText("Categoria:");
+
         jlbCompra.setText("Valor compra:");
 
         jlbVenda.setText("Valor Venda:");
@@ -75,10 +80,13 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jADescricao);
 
         jbIncluir.setText("Incluir");
+        jbIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbIncluirActionPerformed(evt);
+            }
+        });
 
         jbSalvar.setText("Salvar");
-
-        jlbCategoria.setText("Categoria:");
 
         javax.swing.GroupLayout JpCadastrarLayout = new javax.swing.GroupLayout(JpCadastrar);
         JpCadastrar.setLayout(JpCadastrarLayout);
@@ -172,6 +180,18 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jbExcluir.setText("Excluir");
+        jbExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbExcluirActionPerformed(evt);
+            }
+        });
+
+        jbBuscar.setText("Buscar");
+        jbBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout JpConsultarLayout = new javax.swing.GroupLayout(JpConsultar);
         JpConsultar.setLayout(JpConsultarLayout);
@@ -187,8 +207,10 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jtxtConsultar))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpConsultarLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -201,10 +223,11 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jtxtConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addGroup(JpConsultarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbAlterar)
-                    .addComponent(jbExcluir))
+                    .addComponent(jbExcluir)
+                    .addComponent(jbBuscar))
                 .addContainerGap())
         );
 
@@ -263,25 +286,6 @@ public class Principal extends javax.swing.JFrame {
         jbSalvar.setVisible(false);
         CardLayout cardCadastrar = (CardLayout) Root.getLayout();
         cardCadastrar.show(Root, "JpCadastrar");
-
-        Produto p = new Produto();
-
-        p.setNome(JtxtNome.getText());
-        p.setDescricao(jADescricao.getText());
-        p.setCategoria(jtxtCategoria.getText());
-        p.setValorCompra(new BigDecimal(jtxtCompra.getText()));
-        p.setValorVenda(new BigDecimal(jtxtVenda.getText()));
-
-        try {
-            ServicoProduto.cadastrarProduto(p);
-            JOptionPane.showMessageDialog(rootPane, "Produto cadastrado com sucesso",
-                    "Cadastro", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        limparCaixas();
     }//GEN-LAST:event_JbCadastarActionPerformed
 
     private void JbConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbConsultarActionPerformed
@@ -300,6 +304,68 @@ public class Principal extends javax.swing.JFrame {
         jbIncluir.setVisible(false);
         jbSalvar.setVisible(true);
     }//GEN-LAST:event_jbAlterarActionPerformed
+
+    private void jbIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIncluirActionPerformed
+        Produto p = new Produto();
+
+        p.setNome(JtxtNome.getText());
+        p.setDescricao(jADescricao.getText());
+        p.setCategoria(jtxtCategoria.getText());
+        p.setValorCompra(new BigDecimal(jtxtCompra.getText()));
+        p.setValorVenda(new BigDecimal(jtxtVenda.getText()));
+
+        try {
+            ServicoProduto.cadastrarProduto(p);
+            JOptionPane.showMessageDialog(rootPane, "Produto cadastrado com sucesso",
+                    "Cadastro", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        limparCaixas();
+    }//GEN-LAST:event_jbIncluirActionPerformed
+
+    private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
+        boolean resultSearch;
+
+        try {
+            resultSearch = refreshList(jtxtConsultar.getText());
+
+            if (!resultSearch) {
+                JOptionPane.showMessageDialog(rootPane, "A busca não gerou resultados",
+                        "Busca", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(),
+                    "Erro ao obter lista", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }//GEN-LAST:event_jbBuscarActionPerformed
+
+    private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbExcluirActionPerformed
+
+    public boolean refreshList(String nomeProduto) {
+        ArrayList<Produto> resultado = ServicoProduto.procurarProduto(nomeProduto);
+
+        if (resultado == null || resultado.isEmpty()) {
+            return false;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) jtConsultar.getModel();
+
+        model.setRowCount(0);
+
+        for (int i = 0; i < resultado.size(); i++) {
+            Produto p = resultado.get(i);
+            if (p != null) {
+
+            }
+        }
+        return true;
+    }
 
     public void limparCaixas() {
         JtxtNome.setText(null);
@@ -356,6 +422,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbAlterar;
+    private javax.swing.JButton jbBuscar;
     private javax.swing.JButton jbExcluir;
     private javax.swing.JButton jbIncluir;
     private javax.swing.JButton jbSair;

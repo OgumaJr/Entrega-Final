@@ -1,14 +1,15 @@
 package br.senac.asterix.lojadeeletronicos.servicos;
 
 import br.senac.asterix.lojadeeletronicos.classes.Produto;
+import java.util.ArrayList;
 
 public class ServicoProduto {
     public static void cadastrarProduto(Produto produto){
     
     }
     
-    public void procurarProduto(String nomeProduto){
-    
+    public static ArrayList<Produto> procurarProduto(String nomeProduto){        
+        return null;
     }
     
     public void obterProduto(long id){

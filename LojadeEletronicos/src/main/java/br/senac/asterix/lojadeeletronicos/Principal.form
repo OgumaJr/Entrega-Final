@@ -186,11 +186,14 @@
                     <Property name="text" type="java.lang.String" value="Nome:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="JtxtNome">
-                </Component>
                 <Component class="javax.swing.JLabel" name="jlbDescricao">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Descri&#xe7;&#xe3;o:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jlbCategoria">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Categoria:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jlbCompra">
@@ -198,12 +201,16 @@
                     <Property name="text" type="java.lang.String" value="Valor compra:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jtxtCompra">
-                </Component>
                 <Component class="javax.swing.JLabel" name="jlbVenda">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Valor Venda:"/>
                   </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="JtxtNome">
+                </Component>
+                <Component class="javax.swing.JTextField" name="jtxtCategoria">
+                </Component>
+                <Component class="javax.swing.JTextField" name="jtxtCompra">
                 </Component>
                 <Component class="javax.swing.JTextField" name="jtxtVenda">
                 </Component>
@@ -226,18 +233,14 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Incluir"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbIncluirActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jbSalvar">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Salvar"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jlbCategoria">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Categoria:"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jtxtCategoria">
                 </Component>
               </SubComponents>
             </Container>
@@ -262,8 +265,10 @@
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jbBuscar" min="-2" pref="81" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jbAlterar" min="-2" pref="81" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jbExcluir" min="-2" pref="81" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -281,10 +286,11 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane2" min="-2" pref="208" max="-2" attributes="0"/>
-                          <EmptySpace pref="11" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jbAlterar" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jbExcluir" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jbBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -333,6 +339,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Excluir"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbExcluirActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="jbBuscar">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Buscar"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbBuscarActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
