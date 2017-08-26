@@ -1,6 +1,10 @@
 package br.senac.asterix.lojadeeletronicos;
 
+import br.senac.asterix.lojadeeletronicos.classes.Produto;
+import br.senac.asterix.lojadeeletronicos.servicos.ServicoProduto;
 import java.awt.CardLayout;
+import java.math.BigDecimal;
+import javax.swing.JOptionPane;
 
 public class Principal extends javax.swing.JFrame {
 
@@ -260,6 +264,24 @@ public class Principal extends javax.swing.JFrame {
         CardLayout cardCadastrar = (CardLayout) Root.getLayout();
         cardCadastrar.show(Root, "JpCadastrar");
 
+        Produto p = new Produto();
+
+        p.setNome(JtxtNome.getText());
+        p.setDescricao(jADescricao.getText());
+        p.setCategoria(jtxtCategoria.getText());
+        p.setValorCompra(new BigDecimal(jtxtCompra.getText()));
+        p.setValorVenda(new BigDecimal(jtxtVenda.getText()));
+
+        try {
+            ServicoProduto.cadastrarProduto(p);
+            JOptionPane.showMessageDialog(rootPane, "Produto cadastrado com sucesso",
+                    "Cadastro", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        limparCaixas();
     }//GEN-LAST:event_JbCadastarActionPerformed
 
     private void JbConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbConsultarActionPerformed
@@ -278,6 +300,14 @@ public class Principal extends javax.swing.JFrame {
         jbIncluir.setVisible(false);
         jbSalvar.setVisible(true);
     }//GEN-LAST:event_jbAlterarActionPerformed
+
+    public void limparCaixas() {
+        JtxtNome.setText(null);
+        jADescricao.setText(null);
+        jtxtCategoria.setText(null);
+        jtxtCompra.setText(null);
+        jtxtVenda.setText(null);
+    }
 
     /**
      * @param args the command line arguments
