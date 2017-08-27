@@ -161,16 +161,31 @@ public class Principal extends javax.swing.JFrame {
 
         jtConsultar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+
             },
             new String [] {
-
+                "ID", "Nome", "Categoria", "Vl Compra", "Vl Venda", "Entrada"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(jtConsultar);
+        if (jtConsultar.getColumnModel().getColumnCount() > 0) {
+            jtConsultar.getColumnModel().getColumn(0).setPreferredWidth(30);
+        }
 
         jbAlterar.setText("Alterar");
         jbAlterar.addActionListener(new java.awt.event.ActionListener() {
@@ -319,8 +334,8 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Produto cadastrado com sucesso",
                     "Cadastro", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(),
+                    "Erro ao incluir produto", JOptionPane.ERROR_MESSAGE);
         }
 
         limparCaixas();
@@ -339,18 +354,33 @@ public class Principal extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage(),
                     "Erro ao obter lista", JOptionPane.ERROR_MESSAGE);
-            return;
         }
     }//GEN-LAST:event_jbBuscarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        // TODO add your handling code here:
+        if (jtConsultar.getSelectedRow() >= 0) {
+            final int row = jtConsultar.getSelectedRow();
+            String nome = (String) jtConsultar.getValueAt(row, 1);
+
+            int msgConfirm = JOptionPane.showConfirmDialog(rootPane, "Excluir o produto \"" + nome + "\"?",
+                    "Confirmar ação", JOptionPane.YES_OPTION);
+
+            if (msgConfirm == JOptionPane.YES_OPTION) {
+                try {
+                    long id = (long) jtConsultar.getValueAt(row, 0);
+                    ServicoProduto.excluirProduto(id);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(rootPane, e.getMessage(),
+                            "Erro ao excluir produto", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     public boolean refreshList(String nomeProduto) {
-        ArrayList<Produto> resultado = ServicoProduto.procurarProduto(nomeProduto);
+        ArrayList<Produto> result = ServicoProduto.procurarProduto(nomeProduto);
 
-        if (resultado == null || resultado.isEmpty()) {
+        if (result == null || result.isEmpty()) {
             return false;
         }
 
@@ -358,10 +388,17 @@ public class Principal extends javax.swing.JFrame {
 
         model.setRowCount(0);
 
-        for (int i = 0; i < resultado.size(); i++) {
-            Produto p = resultado.get(i);
+        for (int i = 0; i < result.size(); i++) {
+            Produto p = result.get(i);
             if (p != null) {
-
+                Object[] row = new Object[6];
+                row[0] = p.getId();
+                row[1] = p.getNome();
+                row[2] = p.getCategoria();
+                row[3] = p.getValorCompra();
+                row[4] = p.getValorVenda();
+                row[5] = p.getDtCadastro();
+                model.addRow(row);
             }
         }
         return true;
