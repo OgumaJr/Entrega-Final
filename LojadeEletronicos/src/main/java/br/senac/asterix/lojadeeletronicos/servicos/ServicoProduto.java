@@ -12,8 +12,8 @@ public class ServicoProduto {
         return null;
     }
     
-    public static void obterProduto(long id){
-    
+    public static Produto obterProduto(long id){
+        return null;
     }
     
     public static void atualizarProduto(Produto produto){

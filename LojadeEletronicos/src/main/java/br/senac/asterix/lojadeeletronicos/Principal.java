@@ -10,6 +10,9 @@ import javax.swing.table.DefaultTableModel;
 
 public class Principal extends javax.swing.JFrame {
 
+    private String ultimaPesquisa;
+    private Produto produtoEmAlteracao;
+
     public Principal() {
         initComponents();
         jbSalvar.setVisible(false);
@@ -87,6 +90,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jbSalvar.setText("Salvar");
+        jbSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout JpCadastrarLayout = new javax.swing.GroupLayout(JpCadastrar);
         JpCadastrar.setLayout(JpCadastrarLayout);
@@ -132,7 +140,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlbNome)
                     .addComponent(JtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlbDescricao)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -219,11 +227,11 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(JpConsultarLayout.createSequentialGroup()
                         .addComponent(jlbConsultar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtxtConsultar))
+                        .addComponent(jtxtConsultar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpConsultarLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -235,14 +243,14 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(JpConsultarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlbConsultar)
-                    .addComponent(jtxtConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtxtConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addGroup(JpConsultarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbAlterar)
-                    .addComponent(jbExcluir)
-                    .addComponent(jbBuscar))
+                    .addComponent(jbExcluir))
                 .addContainerGap())
         );
 
@@ -313,11 +321,20 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSairActionPerformed
 
     private void jbAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAlterarActionPerformed
-        CardLayout cardCadastrar = (CardLayout) Root.getLayout();
-        cardCadastrar.show(Root, "JpCadastrar");
+        try {
+            final int row = jtConsultar.getSelectedRow();
 
-        jbIncluir.setVisible(false);
-        jbSalvar.setVisible(true);
+            if (row >= 0) {
+                long id = (long) jtConsultar.getValueAt(row, 0);
+
+                produtoEmAlteracao = ServicoProduto.obterProduto(id);
+
+                preencherCaixas();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(),
+                    "Erro ao alterar produto", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jbAlterarActionPerformed
 
     private void jbIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIncluirActionPerformed
@@ -343,17 +360,18 @@ public class Principal extends javax.swing.JFrame {
 
     private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
         boolean resultSearch;
+        ultimaPesquisa = jtxtConsultar.getText();
 
         try {
-            resultSearch = refreshList(jtxtConsultar.getText());
+            resultSearch = refreshList();
 
             if (!resultSearch) {
                 JOptionPane.showMessageDialog(rootPane, "A busca não gerou resultados",
-                        "Busca", JOptionPane.INFORMATION_MESSAGE);
+                        "Relatório", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage(),
-                    "Erro ao obter lista", JOptionPane.ERROR_MESSAGE);
+                    "Erro ao obter relatório", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbBuscarActionPerformed
 
@@ -363,12 +381,18 @@ public class Principal extends javax.swing.JFrame {
             String nome = (String) jtConsultar.getValueAt(row, 1);
 
             int msgConfirm = JOptionPane.showConfirmDialog(rootPane, "Excluir o produto \"" + nome + "\"?",
-                    "Confirmar ação", JOptionPane.YES_OPTION);
+                    "Confirmação", JOptionPane.YES_OPTION);
 
             if (msgConfirm == JOptionPane.YES_OPTION) {
                 try {
                     long id = (long) jtConsultar.getValueAt(row, 0);
+
                     ServicoProduto.excluirProduto(id);
+
+                    JOptionPane.showMessageDialog(rootPane, "Produto excluido com sucesso",
+                            "Exclusão", JOptionPane.INFORMATION_MESSAGE);
+
+                    this.refreshList();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(rootPane, e.getMessage(),
                             "Erro ao excluir produto", JOptionPane.ERROR_MESSAGE);
@@ -377,8 +401,33 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbExcluirActionPerformed
 
-    public boolean refreshList(String nomeProduto) {
-        ArrayList<Produto> result = ServicoProduto.procurarProduto(nomeProduto);
+    private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
+        Produto p = produtoEmAlteracao;
+
+        p.setNome(JtxtNome.getText());
+        p.setDescricao(jADescricao.getText());
+        p.setCategoria(jtxtCategoria.getText());
+        p.setValorCompra(new BigDecimal(jtxtCompra.getText()));
+        p.setValorVenda(new BigDecimal(jtxtVenda.getText()));
+
+        try {
+            ServicoProduto.atualizarProduto(p);
+            
+            JOptionPane.showMessageDialog(rootPane, "Produto alterado com sucesso",
+                    "Alteração", JOptionPane.INFORMATION_MESSAGE);
+            
+            JbConsultarActionPerformed(evt);
+            this.refreshList();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(),
+                    "Erro ao atualizar produto", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jbSalvarActionPerformed
+
+    
+
+    public boolean refreshList() {
+        ArrayList<Produto> result = ServicoProduto.procurarProduto(ultimaPesquisa);
 
         if (result == null || result.isEmpty()) {
             return false;
@@ -404,6 +453,21 @@ public class Principal extends javax.swing.JFrame {
         return true;
     }
 
+    public void preencherCaixas() {
+        CardLayout cardCadastrar = (CardLayout) Root.getLayout();
+        cardCadastrar.show(Root, "JpCadastrar");
+        jbIncluir.setVisible(false);
+        jbSalvar.setVisible(true);
+
+        Produto p = produtoEmAlteracao;
+
+        JtxtNome.setText(p.getNome());
+        jADescricao.setText(p.getDescricao());
+        jtxtCategoria.setText(p.getCategoria());
+        jtxtCompra.setText(p.getValorCompra().toString());
+        jtxtVenda.setText(p.getValorVenda().toString());
+    }
+    
     public void limparCaixas() {
         JtxtNome.setText(null);
         jADescricao.setText(null);
