@@ -429,6 +429,8 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, e.getMessage(),
                     "Erro ao atualizar produto", JOptionPane.ERROR_MESSAGE);
         }
+        
+        limparCaixas();
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     public boolean refreshList() throws DataSourceException {
