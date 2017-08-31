@@ -477,8 +477,8 @@ public class Principal extends javax.swing.JFrame {
         JtxtNome.setText(null);
         jADescricao.setText(null);
         jtxtCategoria.setText(null);
-        jtxtCompra.setText(null);
-        jtxtVenda.setText(null);
+        jtxtCompra.setText("0");
+        jtxtVenda.setText("0");
     }
 
     /**

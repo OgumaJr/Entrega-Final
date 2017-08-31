@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DaoProduto {
 
-    public static void inserirProduto(Produto produto) throws SQLException {
+    public static void inserirProduto(Produto produto) throws SQLException, ClassNotFoundException {
         String sql = "INSERT INTO produto (nome, descricao, "
                 + "vl_compra, vl_venda, categoria, dt_cadastro)"
                 + " VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -40,7 +40,7 @@ public class DaoProduto {
         }
     }
 
-    public static void atualizarProduto(Produto produto) throws SQLException {
+    public static void atualizarProduto(Produto produto) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE produto SET nome=?, descricao=?, vl_compra=?,"
                 + " vl_venda=?, categoria=? WHERE (produto.id=?)";
 
@@ -70,7 +70,7 @@ public class DaoProduto {
         }
     }
 
-    public static ArrayList<Produto> procurarProduto(String nomeProduto) throws SQLException {
+    public static ArrayList<Produto> procurarProduto(String nomeProduto) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM produto WHERE (produto.nome LIKE(?))";
 
         ArrayList<Produto> listaProdutos = null;
@@ -121,7 +121,7 @@ public class DaoProduto {
         return listaProdutos;
     }
 
-    public static Produto obterProduto(long id) throws SQLException {
+    public static Produto obterProduto(long id) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM produto WHERE (produto.id=?)";
 
         Connection connection = null;
@@ -164,7 +164,7 @@ public class DaoProduto {
         return null;
     }
 
-    public static void excluirProduto(long id) throws SQLException {
+    public static void excluirProduto(long id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM produto WHERE (produto.id=?)";
 
         Connection connection = null;
