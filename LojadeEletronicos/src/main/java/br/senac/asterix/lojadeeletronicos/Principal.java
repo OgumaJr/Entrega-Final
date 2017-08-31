@@ -16,6 +16,8 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() {
         initComponents();
+        jtxtCompra.setText("0");
+        jtxtVenda.setText("0");
         jbSalvar.setVisible(false);
     }
 
@@ -357,6 +359,7 @@ public class Principal extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage(),
                     "Erro ao incluir produto", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         limparCaixas();
@@ -416,10 +419,10 @@ public class Principal extends javax.swing.JFrame {
 
         try {
             ServicoProduto.atualizarProduto(p);
-            
+
             JOptionPane.showMessageDialog(rootPane, "Produto alterado com sucesso",
                     "Alteração", JOptionPane.INFORMATION_MESSAGE);
-            
+
             JbConsultarActionPerformed(evt);
             this.refreshList();
         } catch (Exception e) {
@@ -428,18 +431,16 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
-    
-
     public boolean refreshList() throws DataSourceException {
-        ArrayList<Produto> result = ServicoProduto.procurarProduto(ultimaPesquisa);
-
-        if (result == null || result.isEmpty()) {
-            return false;
-        }
+        ArrayList<Produto> result = ServicoProduto.procurarProduto(ultimaPesquisa);        
 
         DefaultTableModel model = (DefaultTableModel) jtConsultar.getModel();
 
         model.setRowCount(0);
+        
+        if (result == null || result.isEmpty()) {
+            return false;
+        }
 
         for (int i = 0; i < result.size(); i++) {
             Produto p = result.get(i);
@@ -471,7 +472,7 @@ public class Principal extends javax.swing.JFrame {
         jtxtCompra.setText(p.getValorCompra().toString());
         jtxtVenda.setText(p.getValorVenda().toString());
     }
-    
+
     public void limparCaixas() {
         JtxtNome.setText(null);
         jADescricao.setText(null);

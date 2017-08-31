@@ -12,14 +12,13 @@ public class DaoProduto {
 
     public static void inserirProduto(Produto produto) throws SQLException {
         String sql = "INSERT INTO produto (nome, descricao, "
-                + "vl_compra, vl_venda, categoria, CURRENT_TIMESTAMP)"
-                + " VALUES (?, ?, ?, ?, ?)";
+                + "vl_compra, vl_venda, categoria, dt_cadastro)"
+                + " VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         Connection connection = null;
 
         PreparedStatement preparedStatement = null;
         try {
-
             connection = ConnectionUtils.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
@@ -43,7 +42,7 @@ public class DaoProduto {
 
     public static void atualizarProduto(Produto produto) throws SQLException {
         String sql = "UPDATE produto SET nome=?, descricao=?, vl_compra=?,"
-                + " vl_venda=?, categoria=? WHERE (id=?)";
+                + " vl_venda=?, categoria=? WHERE (produto.id=?)";
 
         Connection connection = null;
 
@@ -58,7 +57,7 @@ public class DaoProduto {
             preparedStatement.setBigDecimal(3, produto.getValorCompra());
             preparedStatement.setBigDecimal(4, produto.getValorVenda());
             preparedStatement.setString(5, produto.getCategoria());
-            preparedStatement.setLong(5, produto.getId());
+            preparedStatement.setLong(6, produto.getId());
 
             preparedStatement.execute();
         } finally {
@@ -123,7 +122,7 @@ public class DaoProduto {
     }
 
     public static Produto obterProduto(long id) throws SQLException {
-        String sql = "SELECT * FROM produto WHERE (id=?)";
+        String sql = "SELECT * FROM produto WHERE (produto.id=?)";
 
         Connection connection = null;
 
@@ -166,7 +165,7 @@ public class DaoProduto {
     }
 
     public static void excluirProduto(long id) throws SQLException {
-        String sql = "DELETE produto WHERE (id)";
+        String sql = "DELETE FROM produto WHERE (produto.id=?)";
 
         Connection connection = null;
 
