@@ -1,6 +1,7 @@
 package br.senac.asterix.lojadeeletronicos;
 
 import br.senac.asterix.lojadeeletronicos.classes.Produto;
+import br.senac.asterix.lojadeeletronicos.exceptions.DataSourceException;
 import br.senac.asterix.lojadeeletronicos.servicos.ServicoProduto;
 import java.awt.CardLayout;
 import java.math.BigDecimal;
@@ -51,6 +52,8 @@ public class Principal extends javax.swing.JFrame {
         jbSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Produto");
+        setResizable(false);
 
         JbCadastar.setText("Cadastrar");
         JbCadastar.addActionListener(new java.awt.event.ActionListener() {
@@ -103,33 +106,34 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(JpCadastrarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(JpCadastrarLayout.createSequentialGroup()
-                        .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlbDescricao)
-                            .addComponent(jlbNome))
-                        .addGap(34, 34, 34)
-                        .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JtxtNome)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JpCadastrarLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jbIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jbSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(JpCadastrarLayout.createSequentialGroup()
-                        .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(JpCadastrarLayout.createSequentialGroup()
                                 .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlbCompra)
-                                    .addComponent(jlbVenda))
-                                .addGap(18, 18, 18)
-                                .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jtxtVenda)
-                                    .addComponent(jtxtCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
-                            .addGroup(JpCadastrarLayout.createSequentialGroup()
-                                .addComponent(jlbCategoria)
-                                .addGap(33, 33, 33)
-                                .addComponent(jtxtCategoria)))
+                                    .addComponent(jlbDescricao)
+                                    .addComponent(jlbNome))
+                                .addGap(34, 34, 34)
+                                .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(JtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(JpCadastrarLayout.createSequentialGroup()
+                                    .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jlbCompra)
+                                        .addComponent(jlbVenda))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(JpCadastrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jtxtVenda)
+                                        .addComponent(jtxtCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
+                                .addGroup(JpCadastrarLayout.createSequentialGroup()
+                                    .addComponent(jlbCategoria)
+                                    .addGap(33, 33, 33)
+                                    .addComponent(jtxtCategoria))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -426,7 +430,7 @@ public class Principal extends javax.swing.JFrame {
 
     
 
-    public boolean refreshList() {
+    public boolean refreshList() throws DataSourceException {
         ArrayList<Produto> result = ServicoProduto.procurarProduto(ultimaPesquisa);
 
         if (result == null || result.isEmpty()) {
